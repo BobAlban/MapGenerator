@@ -16,7 +16,7 @@ public class TestMidiDecoder {
 		if(angle<0) {
 			angle+=Math.PI*2;
 		}
-		System.out.println(angle/Math.PI);
+		System.out.println("angle: " + angle/Math.PI);
 		
 	}
 	
