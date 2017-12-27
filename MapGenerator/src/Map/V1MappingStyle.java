@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import Gui.Graph;
+import GUI.Graph;
 import HitObjects.Circle;
 import HitObjects.Pair;
 import midiDecoder.MidiInfo;
@@ -161,15 +161,15 @@ public class V1MappingStyle implements IMap {
 			/*debug*/ System.out.println("1) " + border + "; a: " + a + " ; " + flowDirection + " ; distanceFromEdge:" + distanceFromEdge);
 			/*debug*/ System.out.println(" -> angle à ajouter: " + (sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))*180/Math.PI) + 
 					" ; angle originel: " + currentAngle*180/Math.PI + " ; angle final: " + 
-					positiveAngle(((currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))))))*180/Math.PI);
-			return positiveAngle((currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))));
+					positiveAngle(currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))))*180/Math.PI);
+			return positiveAngle(currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))));
 		}
 		else {
 			/*debug*/ System.out.println("2) " + border + "; a: " + a + flowDirection);
 			/*debug*/ System.out.println(" -> angle à ajouter: " + (sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))*180/Math.PI) + 
 					" ; angle originel: " + currentAngle*180/Math.PI + " ; angle final: " + 
-					positiveAngle(((currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))))))*180/Math.PI);
-			return positiveAngle((currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))));
+					positiveAngle(currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))))*180/Math.PI);
+			return positiveAngle(currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))));
 		}
 		
 	}
