@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import Gui.Graph;
 import HitObjects.Circle;
 import HitObjects.Pair;
 import midiDecoder.MidiInfo;
@@ -43,69 +44,79 @@ public class V1MappingStyle implements IMap {
 		boolean newCombo;
 		Circle nextCircle = new Circle(256,192,0,true);
 		Pair<Pair<Double,Double>,Pair<Double,Double>> pos;
-		if(getRythmNext(0)<=2) {
-			Pair<Double,Double> nextPos = polarToCarthesian(new Pair<Double,Double>(56d, 192d), angle, r);
-			res += new Circle(nextPos.getLeft(),nextPos.getRight(),sortedMidiEvents.get(0).getStartTick(),false);
-			pos = new Pair<Pair<Double,Double>, Pair<Double,Double>>(new Pair<Double,Double>(256d,192d),new Pair<Double,Double>(nextPos.getLeft(),nextPos.getRight()));
-		}
-		else {
-			int n = 0;
-			while(n<sortedMidiEvents.size()-1) {
-				if(getRythmNext(n)>3) n++;
-				else break;
-			}
-			res += stackCircle(new Circle(256,192,sortedMidiEvents.get(1).getStartTick(),false),1,n);
-			Pair<Double,Double> nextPos = polarToCarthesian(new Pair<Double,Double>(56d, 192d), angle, r);
-			res += new Circle(nextPos.getLeft(),nextPos.getRight(),sortedMidiEvents.get(n+1).getStartTick(),false);
-			pos = new Pair<Pair<Double,Double>, Pair<Double,Double>>(new Pair<Double,Double>(256d,192d), new Pair<Double,Double>(nextPos.getLeft(),nextPos.getRight()));
-		}
-		System.out.println("(338, 357)\n(373, 377)");
-		System.out.println("_________________________");
-		pos = new Pair<Pair<Double,Double>, Pair<Double,Double>>(new Pair<Double,Double>(338d,357d), new Pair<Double,Double>(373d,377d));
-		double a = (double)(pos.getRight().getRight()-pos.getLeft().getRight())/(double)(pos.getRight().getLeft()-pos.getLeft().getLeft());
-		double angleOfNextObject;
-		Pair<Double,Double> nextPos;
-		if(flowDirection(pos).getLeft())	angleOfNextObject = Math.atan(a);
-		else								angleOfNextObject = Math.atan(-a);
-		for(int i=2;i<sortedMidiEvents.size()-1;i++) {
-			if(getRythmPrevious(i)>4) i++;
-			offset= Math.round(sortedMidiEvents.get(i).getStartTick()*durationTick);
-			rythmNext=getRythmNext(i);
-			rythmPrevious=getRythmPrevious(i);
-			newCombo = getRythmPrevious(i)<=1;
-			if(/*rythmNext<=2 && rythmPrevious<=2*/true ) {
-				r = 16800/(BPM*sliderVelocity*rythmNext);
-				a = (double)(pos.getRight().getRight()-pos.getLeft().getRight())/(double)(pos.getRight().getLeft()-pos.getLeft().getLeft());
-				double b = pos.getRight().getRight()- a*pos.getRight().getLeft();
-				double norm = Math.sqrt(Math.pow(pos.getRight().getLeft()-pos.getLeft().getLeft(), 2) + Math.pow(pos.getRight().getRight()-pos.getLeft().getRight(),2));
-				char border = border(flowDirection(pos),a,b);
-				double distanceFromEdge = distanceFromEdge(pos.getRight(), border, a, b, norm);
-				angleOfNextObject = angleOfNextObject(angleOfNextObject,flowDirection(pos), pos,border,distanceFromEdge,a,b);
-				nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject,r);
-				nextCircle = new Circle(nextPos.getLeft(),nextPos.getRight(),offset,newCombo);
+		ArrayList<Pair<Double,Double>> listHitObjectPos= new ArrayList<Pair<Double,Double>>();
+		
+		try {
+			if(getRythmNext(0)<=2) {
+				Pair<Double,Double> nextPos = polarToCarthesian(new Pair<Double,Double>(56d, 192d), angle, r);
+				res += new Circle(nextPos.getLeft(),nextPos.getRight(),sortedMidiEvents.get(0).getStartTick(),false);
+				pos = new Pair<Pair<Double,Double>, Pair<Double,Double>>(new Pair<Double,Double>(256d,192d),new Pair<Double,Double>(nextPos.getLeft(),nextPos.getRight()));
 			}
 			else {
-				/**
-				 * just a paste of the if
-				 */
+				int n = 0;
+				while(n<sortedMidiEvents.size()-1) {
+					if(getRythmNext(n)>3) n++;
+					else break;
 				}
-			if(nextCircle.getXPos()<=0d || nextCircle.getXPos()>=512 || nextCircle.getYPos()<=0d || nextCircle.getYPos()>=384d) {
-				/*debug*/ System.out.println("(" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")\nAngle inverted" );
-				angleOfNextObject=-angleOfNextObject;
-				nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject,r);
-				nextCircle = new Circle(nextPos.getLeft(),nextPos.getRight(),offset,newCombo);
+				res += stackCircle(new Circle(256,192,sortedMidiEvents.get(1).getStartTick(),false),1,n);
+				Pair<Double,Double> nextPos = polarToCarthesian(new Pair<Double,Double>(56d, 192d), angle, r);
+				res += new Circle(nextPos.getLeft(),nextPos.getRight(),sortedMidiEvents.get(n+1).getStartTick(),false);
+				pos = new Pair<Pair<Double,Double>, Pair<Double,Double>>(new Pair<Double,Double>(256d,192d), new Pair<Double,Double>(nextPos.getLeft(),nextPos.getRight()));
 			}
-			/*debug*/ System.out.println(i + "/" + sortedMidiEvents.size() + ": (" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")" );
-			assert nextCircle.getXPos()>=0d		: nextCircle;
-			assert nextCircle.getXPos()<=512d		: nextCircle;
-			assert nextCircle.getYPos()>=0d		: nextCircle;
-			assert nextCircle.getYPos()<=384d		: nextCircle;
-			res += nextCircle;
-			pos.setLeft(pos.getRight());
-			pos.setRight(new Pair<Double,Double>(nextCircle.getXPos(),nextCircle.getYPos()));
+			System.out.println("(338, 357)\n(373, 377)");
+			System.out.println("_________________________");
+			pos = new Pair<Pair<Double,Double>, Pair<Double,Double>>(new Pair<Double,Double>(338d,357d), new Pair<Double,Double>(373d,377d));
+			double a = (double)(pos.getRight().getRight()-pos.getLeft().getRight())/(double)(pos.getRight().getLeft()-pos.getLeft().getLeft());
+			double angleOfNextObject;
+			Pair<Double,Double> nextPos;
+			if(flowDirection(pos).getLeft())	angleOfNextObject = Math.atan(a);
+			else								angleOfNextObject = Math.atan(-a);
+			for(int i=2;i<sortedMidiEvents.size()-1;i++) {
+				if(getRythmPrevious(i)>4) i++;
+				offset= Math.round(sortedMidiEvents.get(i).getStartTick()*durationTick);
+				rythmNext=getRythmNext(i);
+				rythmPrevious=getRythmPrevious(i);
+				newCombo = getRythmPrevious(i)<=1;
+				if(/*rythmNext<=2 && rythmPrevious<=2*/true ) {
+					r = 16800/(BPM*sliderVelocity*rythmNext);
+					a = (double)(pos.getRight().getRight()-pos.getLeft().getRight())/(double)(pos.getRight().getLeft()-pos.getLeft().getLeft());
+					double b = pos.getRight().getRight()- a*pos.getRight().getLeft();
+					double norm = Math.sqrt(Math.pow(pos.getRight().getLeft()-pos.getLeft().getLeft(), 2) + Math.pow(pos.getRight().getRight()-pos.getLeft().getRight(),2));
+					char border = border(flowDirection(pos),a,b);
+					double distanceFromEdge = distanceFromEdge(pos.getRight(), border, a, b, norm);
+					angleOfNextObject = angleOfNextObject(angleOfNextObject,flowDirection(pos), pos,border,distanceFromEdge,a,b);
+					nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject,r);
+					nextCircle = new Circle(nextPos.getLeft(),nextPos.getRight(),offset,newCombo);
+				}
+				else {
+					/**
+					 * just a paste of the if
+					 */
+					}
+				if(nextCircle.getXPos()<=0d || nextCircle.getXPos()>=512 || nextCircle.getYPos()<=0d || nextCircle.getYPos()>=384d) {
+					/*debug*/ System.out.println("(" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")\nAngle inverted" );
+					angleOfNextObject=-angleOfNextObject;
+					nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject,r);
+					nextCircle = new Circle(nextPos.getLeft(),nextPos.getRight(),offset,newCombo);
+				}
+				/*debug*/ System.out.println(i + "/" + sortedMidiEvents.size() + ": (" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")" );
+				assert nextCircle.getXPos()>=0d			: nextCircle;
+				assert nextCircle.getXPos()<=512d		: nextCircle;
+				assert nextCircle.getYPos()>=0d			: nextCircle;
+				assert nextCircle.getYPos()<=384d		: nextCircle;
+				res += nextCircle;
+				listHitObjectPos.add(nextPos);
+				pos.setLeft(pos.getRight());
+				pos.setRight(new Pair<Double,Double>(nextCircle.getXPos(),nextCircle.getYPos()));
+			}
+			System.out.println(res);
+			return res;
 		}
-		System.out.println(res);
-		return res;
+		catch(AssertionError e) {
+			new Graph(listHitObjectPos);
+			throw e;
+		}
+		
 	}
 
 	public void osuFileGeneration() {
