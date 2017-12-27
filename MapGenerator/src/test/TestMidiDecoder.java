@@ -12,8 +12,12 @@ public class TestMidiDecoder {
 		//System.out.println("x = " + 100*Math.cos(r) + "\ny = " + 100*Math.sin(r));
 		//System.out.println(180*Math.atan(100000)/Math.PI + "\n" + 180*Math.atan(-100000)/Math.PI);
 		
+		double angle = -Math.PI;
+		if(angle<0) {
+			angle+=Math.PI*2;
+		}
+		System.out.println(angle/Math.PI);
 		
-		System.out.println(-200%180);
 	}
 	
 }
