@@ -132,21 +132,22 @@ public class V1MappingStyle implements IMap {
 		int sign = 0;
 		/*debug*/ //System.out.print("pos : " + pos);
 		/*debug*/ System.out.println();
-		if		((border=='U' && flowDirection.getLeft()) ||
-				(border=='R' && !flowDirection.getRight()) ||
-				(border=='D' && !flowDirection.getLeft()) ||
-				(border=='L' && flowDirection.getRight())) {
+		if		(((border=='U' || border=='u') && flowDirection.getLeft()) ||
+				((border=='R' || border=='r') && !flowDirection.getRight()) ||
+				((border=='D' || border=='d') && !flowDirection.getLeft()) ||
+				((border=='L' || border=='l') && flowDirection.getRight())) {
 			sign = 1;
 		}
-		else if((border=='U' && !flowDirection.getLeft()) ||
-				(border=='R' && flowDirection.getRight()) ||
-				(border=='D' && flowDirection.getLeft()) ||
-				(border=='L' && !flowDirection.getRight())) {
+		else if(((border=='U' || border=='u') && !flowDirection.getLeft()) ||
+				((border=='R' || border=='r') && flowDirection.getRight()) ||
+				((border=='D' || border=='d') && flowDirection.getLeft()) ||
+				((border=='L' || border=='l') && !flowDirection.getRight())) {
 			sign = -1;
 		}
 		else {
 			assert false : "intersectonWithBorder Exception";
 		}
+		if(Character.isLowerCase(border))			sign=4*(-sign);
 		/*debug*/ if(flowDirection.getLeft())		System.out.print("1");
 		/*debug*/ else								System.out.print("2");
 		/*debug*/ System.out.println(") " + border + "; a: " + a + " ; " + flowDirection + " ; distanceFromEdge:" + distanceFromEdge);
@@ -191,30 +192,60 @@ public class V1MappingStyle implements IMap {
 	public char border(Pair<Boolean,Boolean> flowDirection, double a, double b) {		
 		/*debug*/ System.out.println(flowDirection + " ; a:" + a + " ; b:" + b);
 		double c;
+		double distanceFromCornerNotAllowed = 0;		//must be in [0;50[, percentage of the border near a corner not considered as the border (ex : 5 => 10% not allowed)
+		double lengthXAxisCorner = 512*distanceFromCornerNotAllowed/100;
+		double lengthYAxisCorner = 384*distanceFromCornerNotAllowed/100;
+		//Search border with the corner constraint
 		if(flowDirection.getLeft()) {
 			c=512*a + b;
-			if(c>=0 && c<=384)		return 'R';
+			if(c>=0+lengthYAxisCorner && c<=384-lengthYAxisCorner)		return 'R';
 			else if(flowDirection.getRight()) {	//x et y augmentent
 				c=(384-b)/a;
-				if(c>=0 && c<=512)	return 'U';
+				if(c>=0+lengthXAxisCorner && c<=512-lengthXAxisCorner)	return 'U';
 			}
 			else {
 				c=(0-b)/a;
-				if(c>=0 && c<=512)	return 'D';
+				if(c>=0+lengthXAxisCorner && c<=512-lengthXAxisCorner)	return 'D';
 			}
 		}
 		else {
 			c=0*a + b;							//test left border
-			if(c>=0 && c<=384)		return 'L';
+			if(c>=0+lengthYAxisCorner && c<=384-lengthYAxisCorner)		return 'L';
 			else if(flowDirection.getRight()) {	//x diminue et y augmente
 				c=(384-b)/a;
-				if(c>=0 && c<=512)	return 'U';
+				if(c>=0+lengthXAxisCorner && c<=512-lengthXAxisCorner)	return 'U';
 			}
 			else {
 				c=(0-b)/a;
-				if(c>=0 && c<=512)	return 'D';
+				if(c>=0+lengthXAxisCorner && c<=512-lengthXAxisCorner)	return 'D';
 			}
 		}
+		//Corner detected, search border without the corner constraint
+		if(flowDirection.getLeft()) {
+			c=512*a + b;
+			if(c>=0 && c<=384)		return 'r';
+			else if(flowDirection.getRight()) {	//x et y augmentent
+				c=(384-b)/a;
+				if(c>=0 && c<=512)	return 'u';
+			}
+			else {
+				c=(0-b)/a;
+				if(c>=0 && c<=512)	return 'd';
+			}
+		}
+		else {
+			c=0*a + b;							//test left border
+			if(c>=0 && c<=384)		return 'l';
+			else if(flowDirection.getRight()) {	//x diminue et y augmente
+				c=(384-b)/a;
+				if(c>=0 && c<=512)	return 'u';
+			}
+			else {
+				c=(0-b)/a;
+				if(c>=0 && c<=512)	return 'd';
+			}
+		}
+		//Can't normally happen
 		assert false : "intersectionWithBorder Exception ; flowDirection: " + flowDirection + " ; (a,b): " + a + b;
 		return '0';
 	}
@@ -230,10 +261,10 @@ public class V1MappingStyle implements IMap {
 	 */
 	public double distanceFromEdge(Pair<Double,Double> lastPos, char border, double a, double b, double norm){
 		Pair<Double,Double> intersectonWithBorder = null;
-		if(border=='U')			intersectonWithBorder = new Pair<Double,Double>((384d-b)/a,384d);
-		else if(border=='R')	intersectonWithBorder = new Pair<Double,Double>(512d,512d*a + b);
-		else if(border=='D')	intersectonWithBorder = new Pair<Double,Double>((0-b)/a,0d);
-		else if(border=='L')	intersectonWithBorder = new Pair<Double,Double>(0d,0d*a + b);
+		if(border=='U' || border=='u')			intersectonWithBorder = new Pair<Double,Double>((384d-b)/a,384d);
+		else if(border=='R' || border=='r')		intersectonWithBorder = new Pair<Double,Double>(512d,512d*a + b);
+		else if(border=='D' || border=='d')		intersectonWithBorder = new Pair<Double,Double>((0-b)/a,0d);
+		else if(border=='L' || border=='l')		intersectonWithBorder = new Pair<Double,Double>(0d,0d*a + b);
 		else					assert false : "intersectonWithBorder Exception";
 		/*debug*/ //System.out.println("intersectonWithBorder : " + intersectonWithBorder );
 		/*debug*/ //System.out.println("distanceFromEdge : " + Math.sqrt(Math.pow(intersectonWithBorder.getLeft()-lastPos.getLeft(), 2) + Math.pow(intersectonWithBorder.getRight()-lastPos.getRight(),2))/norm);
