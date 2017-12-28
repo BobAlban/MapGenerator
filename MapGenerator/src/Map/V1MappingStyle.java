@@ -71,6 +71,7 @@ public class V1MappingStyle implements IMap {
 			Pair<Double,Double> nextPos;
 			if(flowDirection(pos).getLeft())	angleOfNextObject = Math.atan(a);
 			else								angleOfNextObject = Math.atan(-a);
+			angleOfNextObject=positiveAngle(angleOfNextObject);
 			for(int i=2;i<sortedMidiEvents.size()-1;i++) {
 				if(getRythmPrevious(i)>4) i++;
 				offset= Math.round(sortedMidiEvents.get(i).getStartTick()*durationTick);
@@ -88,26 +89,14 @@ public class V1MappingStyle implements IMap {
 					nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject,r);
 					nextCircle = new Circle(nextPos.getLeft(),nextPos.getRight(),offset,newCombo);
 				}
-				else {
-					/**
-					 * just a paste of the if
-					 */
-					}
-				
-				if(nextCircle.getXPos()<=0d || nextCircle.getXPos()>=512 || nextCircle.getYPos()<=0d || nextCircle.getYPos()>=384d) {
-					/*debug*/ System.out.println("(" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")\nAngle inverted" );
-					angleOfNextObject=-angleOfNextObject;
-					nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject,r);
-					nextCircle = new Circle(nextPos.getLeft(),nextPos.getRight(),offset,newCombo);
-				}
+				/*else {
+					just a paste of the if
+				}*/
 				/*debug*/ System.out.println(i + "/" + sortedMidiEvents.size() + ": (" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")" );
-				assert nextCircle.getXPos()>=0d			: nextCircle;
-				assert nextCircle.getXPos()<=512d		: nextCircle;
-				assert nextCircle.getYPos()>=0d			: nextCircle;
-				assert nextCircle.getYPos()<=384d		: nextCircle;
-				res += nextCircle;
 				Pair<Pair<Double,Double>,Double> posAngle = new Pair<Pair<Double,Double>,Double>(nextPos,angleOfNextObject);
 				listPosAngle.add(posAngle);
+				assert nextCircle.getXPos()>=0d	&& nextCircle.getXPos()<=512d && nextCircle.getYPos()>=0d && nextCircle.getYPos()<=384d : nextCircle;
+				res += nextCircle;
 				pos.setLeft(pos.getRight());
 				pos.setRight(new Pair<Double,Double>(nextCircle.getXPos(),nextCircle.getYPos()));
 			}
@@ -143,60 +132,64 @@ public class V1MappingStyle implements IMap {
 		int sign = 0;
 		/*debug*/ //System.out.print("pos : " + pos);
 		/*debug*/ System.out.println();
-		if((border=='U' && flowDirection.getLeft()) ||
+		if		((border=='U' && flowDirection.getLeft()) ||
 				(border=='R' && !flowDirection.getRight()) ||
 				(border=='D' && !flowDirection.getLeft()) ||
 				(border=='L' && flowDirection.getRight())) {
-			sign = -1;
+			sign = 1;
 		}
 		else if((border=='U' && !flowDirection.getLeft()) ||
 				(border=='R' && flowDirection.getRight()) ||
 				(border=='D' && flowDirection.getLeft()) ||
 				(border=='L' && !flowDirection.getRight())) {
-			sign = 1;
+			sign = -1;
 		}
 		else {
 			assert false : "intersectonWithBorder Exception";
 		}
-		/*debug*/ //System.out.println("sign: " + sign);
-		if(flowDirection.getLeft()) {
-			/*debug*/ System.out.println("1) " + border + "; a: " + a + " ; " + flowDirection + " ; distanceFromEdge:" + distanceFromEdge);
-			/*debug*/ System.out.println(" -> angle à ajouter: " + (sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))*180/Math.PI) + 
-					" ; angle originel: " + currentAngle*180/Math.PI + " ; angle final: " + 
-					positiveAngle(currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))))*180/Math.PI);
-			return positiveAngle(currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))));
-		}
-		else {
-			/*debug*/ System.out.println("2) " + border + "; a: " + a + flowDirection);
-			/*debug*/ System.out.println(" -> angle à ajouter: " + (sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))*180/Math.PI) + 
-					" ; angle originel: " + currentAngle*180/Math.PI + " ; angle final: " + 
-					positiveAngle(currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))))*180/Math.PI);
-			return positiveAngle(currentAngle + sign*Math.abs(Math.atan(2/(3*distanceFromEdge))));
-		}
-		
+		/*debug*/ if(flowDirection.getLeft())		System.out.print("1");
+		/*debug*/ else								System.out.print("2");
+		/*debug*/ System.out.println(") " + border + "; a: " + a + " ; " + flowDirection + " ; distanceFromEdge:" + distanceFromEdge);
+		/*debug*/ System.out.println(" -> angle à ajouter: " + (sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))*180/Math.PI) + 
+				" ; angle originel: " + currentAngle*180/Math.PI + " ; angle final: " + 
+				positiveAngle(currentAngle - sign*Math.abs(Math.atan(2/(3*distanceFromEdge))))*180/Math.PI);
+		return positiveAngle(currentAngle - sign*Math.abs(Math.atan(2/(3*distanceFromEdge))));		//we substract instead of add because of the y axis
 	}
 	
+	/**
+	 * check if the angle given in parameter is between 0 and 2*pi, then add or substract 2*pi to obtain the coresponding angle between 0 and 2*pi 
+	 * @param angle	: the angle to convert
+	 * @return the converted angle between 0 and 2*pi
+	 */
 	public double positiveAngle(double angle) {
 		/*debug*/ //System.out.println(angle*180/Math.PI);
-		if(angle<0)			angle+=Math.PI*2;
-		if(angle<0)			assert false : "angle must be positive : " + angle*180/Math.PI;
+		while(angle<0)							angle+=2*Math.PI;
+		while(angle>=2*Math.PI)					angle-=2*Math.PI;
+		if(angle<0 || angle>=2*Math.PI)			assert false : "angle must be beetween 0 and 360 degrees : " + angle*180/Math.PI;
 		/*debug*/ //System.out.println(angle*180/Math.PI);
 		return angle;
 	}
 	
-	public Pair<Boolean,Boolean> flowDirection(Pair<Pair<Double,Double>,Pair<Double,Double>> pos){	//inverted boolean for y flow
+	public Pair<Boolean,Boolean> flowDirection(Pair<Pair<Double,Double>,Pair<Double,Double>> pos){
 		if(pos.getRight().getLeft()>=pos.getLeft().getLeft()) {			//x augmente
-			if(pos.getRight().getRight()>=pos.getLeft().getRight())		return new Pair<Boolean,Boolean>(true,false);
-			else														return new Pair<Boolean,Boolean>(true,true);
+			if(pos.getRight().getRight()>=pos.getLeft().getRight())		return new Pair<Boolean,Boolean>(true,true);
+			else														return new Pair<Boolean,Boolean>(true,false);
 		}
 		else {															//x diminue
-			if(pos.getRight().getRight()>pos.getLeft().getRight())		return new Pair<Boolean,Boolean>(false,false);
-			else														return new Pair<Boolean,Boolean>(false,true);
+			if(pos.getRight().getRight()>pos.getLeft().getRight())		return new Pair<Boolean,Boolean>(false,true);
+			else														return new Pair<Boolean,Boolean>(false,false);
 		}
 	}
 	
-	public char border(Pair<Boolean,Boolean> flowDirection, double a, double b) {
-		/*debug*/ System.out.println(flowDirection + " ; " + a + " ; " + b);
+	/**
+	 * CARE Y AXIS : BORDER DOWN IS THE BORDER UP FOR YOU IF THE Y AXIS GO UP FOR YOU 
+	 * @param flowDirection
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public char border(Pair<Boolean,Boolean> flowDirection, double a, double b) {		
+		/*debug*/ System.out.println(flowDirection + " ; a:" + a + " ; b:" + b);
 		double c;
 		if(flowDirection.getLeft()) {
 			c=512*a + b;
@@ -206,7 +199,7 @@ public class V1MappingStyle implements IMap {
 				if(c>=0 && c<=512)	return 'U';
 			}
 			else {
-				c = (0-b)/a;
+				c=(0-b)/a;
 				if(c>=0 && c<=512)	return 'D';
 			}
 		}
@@ -218,7 +211,7 @@ public class V1MappingStyle implements IMap {
 				if(c>=0 && c<=512)	return 'U';
 			}
 			else {
-				c = (0-b)/a;
+				c=(0-b)/a;
 				if(c>=0 && c<=512)	return 'D';
 			}
 		}
