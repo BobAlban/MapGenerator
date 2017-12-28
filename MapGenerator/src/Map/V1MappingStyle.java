@@ -44,7 +44,7 @@ public class V1MappingStyle implements IMap {
 		boolean newCombo;
 		Circle nextCircle = new Circle(256,192,0,true);
 		Pair<Pair<Double,Double>,Pair<Double,Double>> pos;
-		ArrayList<Pair<Double,Double>> listHitObjectPos= new ArrayList<Pair<Double,Double>>();
+		ArrayList<Pair<Pair<Double,Double>,Double>> listPosAngle= new ArrayList<Pair<Pair<Double,Double>,Double>>();
 		
 		try {
 			if(getRythmNext(0)<=2) {
@@ -93,6 +93,7 @@ public class V1MappingStyle implements IMap {
 					 * just a paste of the if
 					 */
 					}
+				
 				if(nextCircle.getXPos()<=0d || nextCircle.getXPos()>=512 || nextCircle.getYPos()<=0d || nextCircle.getYPos()>=384d) {
 					/*debug*/ System.out.println("(" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")\nAngle inverted" );
 					angleOfNextObject=-angleOfNextObject;
@@ -105,7 +106,8 @@ public class V1MappingStyle implements IMap {
 				assert nextCircle.getYPos()>=0d			: nextCircle;
 				assert nextCircle.getYPos()<=384d		: nextCircle;
 				res += nextCircle;
-				listHitObjectPos.add(nextPos);
+				Pair<Pair<Double,Double>,Double> posAngle = new Pair<Pair<Double,Double>,Double>(nextPos,angleOfNextObject);
+				listPosAngle.add(posAngle);
 				pos.setLeft(pos.getRight());
 				pos.setRight(new Pair<Double,Double>(nextCircle.getXPos(),nextCircle.getYPos()));
 			}
@@ -113,7 +115,7 @@ public class V1MappingStyle implements IMap {
 			return res;
 		}
 		catch(AssertionError e) {
-			new Graph(listHitObjectPos);
+			new Graph(listPosAngle);
 			throw e;
 		}
 		
@@ -182,14 +184,14 @@ public class V1MappingStyle implements IMap {
 		return angle;
 	}
 	
-	public Pair<Boolean,Boolean> flowDirection(Pair<Pair<Double,Double>,Pair<Double,Double>> pos){
+	public Pair<Boolean,Boolean> flowDirection(Pair<Pair<Double,Double>,Pair<Double,Double>> pos){	//inverted boolean for y flow
 		if(pos.getRight().getLeft()>=pos.getLeft().getLeft()) {			//x augmente
-			if(pos.getRight().getRight()>=pos.getLeft().getRight())		return new Pair<Boolean,Boolean>(true,true);
-			else														return new Pair<Boolean,Boolean>(true,false);
+			if(pos.getRight().getRight()>=pos.getLeft().getRight())		return new Pair<Boolean,Boolean>(true,false);
+			else														return new Pair<Boolean,Boolean>(true,true);
 		}
 		else {															//x diminue
-			if(pos.getRight().getRight()>pos.getLeft().getRight())		return new Pair<Boolean,Boolean>(false,true);
-			else														return new Pair<Boolean,Boolean>(false,false);
+			if(pos.getRight().getRight()>pos.getLeft().getRight())		return new Pair<Boolean,Boolean>(false,false);
+			else														return new Pair<Boolean,Boolean>(false,true);
 		}
 	}
 	
