@@ -104,7 +104,7 @@ public class V1MappingStyle implements IMap {
 			return res;
 		}
 		catch(AssertionError e) {
-			new Graph(listPosAngle);
+			new Graph(listPosAngle,1.5d);
 			throw e;
 		}
 		

@@ -1,5 +1,7 @@
 package test;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.Random;
 
 //import midiDecoder.*;
@@ -16,7 +18,10 @@ public class TestMidiDecoder {
 		
 		Random r = new Random();
 		r.nextGaussian();
-		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+		System.out.println(width);
 		
 	}
 	
