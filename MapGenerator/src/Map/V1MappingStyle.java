@@ -42,6 +42,7 @@ public class V1MappingStyle implements IMap {
 		float rythmPrevious;
 		int offset;
 		boolean newCombo;
+		double angleModification;
 		Circle nextCircle = new Circle(256,192,0,true);
 		Pair<Pair<Double,Double>,Pair<Double,Double>> pos;
 		ArrayList<Pair<Pair<Double,Double>,Double>> listPosAngle= new ArrayList<Pair<Pair<Double,Double>,Double>>();
@@ -85,13 +86,27 @@ public class V1MappingStyle implements IMap {
 					double norm = Math.sqrt(Math.pow(pos.getRight().getLeft()-pos.getLeft().getLeft(), 2) + Math.pow(pos.getRight().getRight()-pos.getLeft().getRight(),2));
 					char border = border(flowDirection(pos),a,b);
 					double distanceFromEdge = distanceFromEdge(pos.getRight(), border, a, b, norm);
-					angleOfNextObject = angleOfNextObject(angleOfNextObject,flowDirection(pos), pos,border,distanceFromEdge,a,b);
-					nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject,r);
+					angleModification = angleOfNextObject(flowDirection(pos), pos,border,distanceFromEdge,a,b);
+					nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject-angleModification,r);
 					nextCircle = new Circle(nextPos.getLeft(),nextPos.getRight(),offset,newCombo);
 				}
 				/*else {
 					just a paste of the if
 				}*/
+				/*debug*/ System.out.println(i + "/" + sortedMidiEvents.size() + ": (" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")" );
+				if(distanceFromNearestCorner(nextPos)<50 && distanceFromNearestCorner(nextPos)<distanceFromNearestCorner(polarToCarthesian(pos.getRight(), angleOfNextObject+angleModification, r))) {
+					System.out.print("Angle inverted!");
+					nextPos = polarToCarthesian(pos.getRight(),angleOfNextObject+angleModification,r);
+					/*debug*/ System.out.print(" ; Angle originel : " + angleOfNextObject*180/Math.PI);
+					angleOfNextObject = positiveAngle(angleOfNextObject + angleModification);
+					/*debug*/ System.out.println(" ; Angle final : " + angleOfNextObject*180/Math.PI);
+					nextCircle = new Circle(nextPos.getLeft(),nextPos.getRight(),offset,newCombo);
+				}
+				else {
+					/*debug*/ System.out.print(" ; Angle originel : " + angleOfNextObject*180/Math.PI);
+					angleOfNextObject = positiveAngle(angleOfNextObject - angleModification);
+					/*debug*/ System.out.println(" ; Angle final : " + angleOfNextObject*180/Math.PI);
+				}
 				/*debug*/ System.out.println(i + "/" + sortedMidiEvents.size() + ": (" + nextPos.getLeft().intValue() + ", " + nextPos.getRight().intValue() + ")" );
 				Pair<Pair<Double,Double>,Double> posAngle = new Pair<Pair<Double,Double>,Double>(nextPos,angleOfNextObject);
 				listPosAngle.add(posAngle);
@@ -128,7 +143,7 @@ public class V1MappingStyle implements IMap {
 	 * @param double b : coefficient of the equation y=ax+b
 	 * @return the angle of the next object
 	 */
-	public double angleOfNextObject(double currentAngle, Pair<Boolean,Boolean> flowDirection, Pair<Pair<Double,Double>,Pair<Double,Double>> pos,char border, double distanceFromEdge, double a, double b) {
+	public double angleOfNextObject(Pair<Boolean,Boolean> flowDirection, Pair<Pair<Double,Double>,Pair<Double,Double>> pos,char border, double distanceFromEdge, double a, double b) {
 		int sign = 0;
 		/*debug*/ //System.out.print("pos : " + pos);
 		/*debug*/ System.out.println();
@@ -147,14 +162,12 @@ public class V1MappingStyle implements IMap {
 		else {
 			assert false : "intersectonWithBorder Exception";
 		}
-		if(Character.isLowerCase(border))			sign=4*(-sign);
+		if(Character.isLowerCase(border))			sign=2*(-sign);
 		/*debug*/ if(flowDirection.getLeft())		System.out.print("1");
 		/*debug*/ else								System.out.print("2");
-		/*debug*/ System.out.println(") " + border + "; a: " + a + " ; " + flowDirection + " ; distanceFromEdge:" + distanceFromEdge);
-		/*debug*/ System.out.println(" -> angle à ajouter: " + (sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))*180/Math.PI) + 
-				" ; angle originel: " + currentAngle*180/Math.PI + " ; angle final: " + 
-				positiveAngle(currentAngle - sign*Math.abs(Math.atan(2/(3*distanceFromEdge))))*180/Math.PI);
-		return positiveAngle(currentAngle - sign*Math.abs(Math.atan(2/(3*distanceFromEdge))));		//we substract instead of add because of the y axis
+		/*debug*/ System.out.println(") sign: " + sign + " ; " + border + "; a: " + a + " ; " + flowDirection + " ; distanceFromEdge:" + distanceFromEdge);
+		/*debug*/ System.out.println(" -> angle à ajouter: " + (sign*Math.abs(Math.atan(2/(3*distanceFromEdge)))*180/Math.PI)); 
+		return positiveAngle(sign*Math.abs(Math.atan(2/(3*distanceFromEdge))));
 	}
 	
 	/**
@@ -192,7 +205,7 @@ public class V1MappingStyle implements IMap {
 	public char border(Pair<Boolean,Boolean> flowDirection, double a, double b) {		
 		/*debug*/ System.out.println(flowDirection + " ; a:" + a + " ; b:" + b);
 		double c;
-		double distanceFromCornerNotAllowed = 0;		//must be in [0;50[, percentage of the border near a corner not considered as the border (ex : 5 => 10% not allowed)
+		double distanceFromCornerNotAllowed = 1;		//must be in [0;50[, percentage of the border near a corner not considered as the border (ex : 5 => 10% not allowed)
 		double lengthXAxisCorner = 512*distanceFromCornerNotAllowed/100;
 		double lengthYAxisCorner = 384*distanceFromCornerNotAllowed/100;
 		//Search border with the corner constraint
@@ -269,6 +282,13 @@ public class V1MappingStyle implements IMap {
 		/*debug*/ //System.out.println("intersectonWithBorder : " + intersectonWithBorder );
 		/*debug*/ //System.out.println("distanceFromEdge : " + Math.sqrt(Math.pow(intersectonWithBorder.getLeft()-lastPos.getLeft(), 2) + Math.pow(intersectonWithBorder.getRight()-lastPos.getRight(),2))/norm);
 		return Math.sqrt(Math.pow(intersectonWithBorder.getLeft()-lastPos.getLeft(), 2) + Math.pow(intersectonWithBorder.getRight()-lastPos.getRight(),2))/norm;
+	}
+	
+	public double distanceFromNearestCorner(Pair<Double,Double> nextPos) {
+		return Math.min(Math.min(Math.sqrt(Math.pow(nextPos.getLeft()-0, 2) + Math.pow(nextPos.getRight()-0, 2)),
+								 Math.sqrt(Math.pow(nextPos.getLeft()-512, 2) + Math.pow(nextPos.getRight()-0, 2))),
+			   Math.min(Math.sqrt(Math.pow(nextPos.getLeft()-512, 2) + Math.pow(nextPos.getRight()-384, 2)),
+						Math.sqrt(Math.pow(nextPos.getLeft()-0, 2) + Math.pow(nextPos.getRight()-384, 2))));
 	}
 	
 	public Pair<Double,Double> polarToCarthesian(Pair<Double,Double> pos, double angle, double r) {
