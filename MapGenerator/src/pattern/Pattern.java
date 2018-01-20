@@ -1,13 +1,13 @@
 package pattern;
 
 import java.util.List;
+import hitObject.Pair;
 
-import hitObject.Circle;
-
-public interface Pattern {		//Create patterns, regardless of the midi file
+public interface Pattern {				//create patterns regardless of the midi file
 	
-	public String hitObjects();
+	public List<Pair<Double,Double>> listPosition();
 	
-	public List<Circle> listObjects();
+	public boolean isOutOfScreen();
 	
+	public void showGraph();
 }

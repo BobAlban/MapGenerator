@@ -13,10 +13,10 @@ import hitObject.Pair;
 
 public class GraphPanel extends JPanel{
 
-	List<Pair<Pair<Double,Double>,Double>> l;
+	List<Pair<Double,Double>> l;
 	double sizeMultiplier;
 
-	public GraphPanel(List<Pair<Pair<Double,Double>,Double>> l, double sizeMultiplier) {
+	public GraphPanel(List<Pair<Double,Double>> l, double sizeMultiplier) {
 		this.l=l;
 		this.sizeMultiplier=sizeMultiplier;
 	}
@@ -40,26 +40,14 @@ public class GraphPanel extends JPanel{
 		//Draw the circles
 		try {
 			int hitCircleSize = 37;			//closest int from cs4 radius (if the in-game radius is well interpreted)
-			int numberCircle=25;			//number of circles to show on the GUI
-			int indexCircle=l.size()-numberCircle;
 			Image img = ImageIO.read(new File("hitcircle.png"));
-			if(indexCircle==0){
-				g.drawLine((int)(sizeMultiplier*338-2), (int)(sizeMultiplier*357-2), (int)(sizeMultiplier*338+2), (int)(sizeMultiplier*357+2));
-				g.drawLine((int)(sizeMultiplier*338-2), (int)(sizeMultiplier*357+2), (int)(sizeMultiplier*338+2), (int)(sizeMultiplier*357-2));
-				g.drawImage(img, (int)(sizeMultiplier*(338-hitCircleSize/2)), (int)(sizeMultiplier*(357-hitCircleSize/2)), (int)(sizeMultiplier*hitCircleSize), (int)(sizeMultiplier*hitCircleSize), this);
-				g.drawString("0: (" + 338 + ", " + 357 + ")", (int)(sizeMultiplier*(338-hitCircleSize/2)), (int)(sizeMultiplier*(357-hitCircleSize/2)));
-				g.drawLine((int)(sizeMultiplier*373-2), (int)(sizeMultiplier*377-2), (int)(sizeMultiplier*373+2), (int)(sizeMultiplier*377+2));
-				g.drawLine((int)(sizeMultiplier*373-2), (int)(sizeMultiplier*377+2), (int)(sizeMultiplier*373+2), (int)(sizeMultiplier*377-2));
-				g.drawImage(img, (int)(sizeMultiplier*(373-hitCircleSize/2)), (int)(sizeMultiplier*(377-hitCircleSize/2)), (int)(sizeMultiplier*hitCircleSize), (int)(sizeMultiplier*hitCircleSize), this);
-				g.drawString("1: (" + 373 + ", " + 377 + ")", (int)(sizeMultiplier*(373-hitCircleSize/2)), (int)(sizeMultiplier*(377-hitCircleSize/2)));
-			}
-			for(int i=indexCircle;i<numberCircle+indexCircle;i++) {
-				double xPos=l.get(i).getLeft().getLeft();
-				double yPos=l.get(i).getLeft().getRight();
+			for(int i=0;i<l.size();i++) {
+				double xPos=l.get(i).getLeft();
+				double yPos=l.get(i).getRight();
 				g.drawLine((int)(sizeMultiplier*(int)xPos-2), (int)(sizeMultiplier*(int)yPos-2), (int)(sizeMultiplier*(int)xPos+2), (int)(sizeMultiplier*(int)yPos+2));
 				g.drawLine((int)(sizeMultiplier*(int)xPos-2), (int)(sizeMultiplier*(int)yPos+2), (int)(sizeMultiplier*(int)xPos+2), (int)(sizeMultiplier*(int)yPos-2));
 				g.drawImage(img, (int)(sizeMultiplier*((int)xPos-hitCircleSize/2)), (int)(sizeMultiplier*((int)yPos-hitCircleSize/2)), (int)(sizeMultiplier*hitCircleSize), (int)(sizeMultiplier*hitCircleSize), this);
-				g.drawString(i+2 + ": (" + (int)xPos + ", " + (int)yPos + ") Angle: " + (int)Math.toDegrees(l.get(i).getRight()), (int)(sizeMultiplier*((int)xPos-hitCircleSize/2)), (int)(sizeMultiplier*((int)yPos-hitCircleSize/2)));
+				g.drawString(i + ": (" + (int)xPos + ", " + (int)yPos + ")", (int)(sizeMultiplier*((int)xPos-hitCircleSize/2)), (int)(sizeMultiplier*((int)yPos-hitCircleSize/2)));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

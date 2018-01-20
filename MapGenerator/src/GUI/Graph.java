@@ -11,10 +11,10 @@ import hitObject.Pair;
 
 public class Graph {
 
-	List<Pair<Pair<Double,Double>,Double>> l;
+	List<Pair<Double,Double>> l;
 	double sizeMultiplier;
 	
-	public Graph(List<Pair<Pair<Double,Double>,Double>> l, double sizeMultiplier) {
+	public Graph(List<Pair<Double,Double>> l, double sizeMultiplier) {
 		this.l=l;
 		this.sizeMultiplier=sizeMultiplier;
 		JPanel panel = new GraphPanel(l,sizeMultiplier);

@@ -1,19 +1,16 @@
 package test;
 
-public class TestMappingStyle {
+import hitObject.Pair;
+import pattern.Pattern;
+import pattern.PatternJumpPolygon;
+
+public class TestPattern {
 
 	public static void main(String[] args) throws Exception {
-		/*  ChaCha_short  */
-		//new V0MappingStyle("C:\\Users\\Alban\\Desktop\\MapGenerator\\GeneratorDirectory\\ChaCha_short\\chacha_short.mid","C:\\Users\\Alban\\Desktop\\MapGenerator\\GeneratorDirectory\\ChaCha_short\\ChaCha_short.osu");
+		Pair<Double,Double> pos = new Pair<Double,Double>(200d,200d);
+		Pattern pattern = new PatternJumpPolygon(4, pos, Math.PI/4, 100d, false, 4);
+		pattern.showGraph();
 		
-		/*  ChaCha  */
-		//new V1MappingStyle("C:\\Users\\Alban\\Desktop\\MapGenerator\\GeneratorDirectory\\ChaCha\\ChaCha.mid","C:\\Users\\Alban\\Desktop\\MapGenerator\\GeneratorDirectory\\ChaCha\\ChaCha.osu",145);
-		
-		/*  Polka  */
-		//new V0MappingStyle("C:\\Users\\alban\\Desktop\\MapGenerator\\GeneratorDirectory\\Polka\\Polka.mid","C:\\Users\\Alban\\Desktop\\MapGenerator\\GeneratorDirectory\\Polka\\Polka.osu");
-		
-		/*  test  */
-		//new V1MappingStyle("C:\\Users\\Alban\\Desktop\\MapGenerator\\GeneratorDirectory\\test\\audio.mid","C:\\Users\\Alban\\Desktop\\MapGenerator\\GeneratorDirectory\\test\\audio.osu",145);
 	}
 
 }
