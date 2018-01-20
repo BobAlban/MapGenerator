@@ -1,4 +1,4 @@
-package HitObjects;
+package hitObject;
 
 import java.util.ArrayList;
 

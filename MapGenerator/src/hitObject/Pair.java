@@ -1,4 +1,4 @@
-package HitObjects;
+package hitObject;
 
 public class Pair<L,R> {
 

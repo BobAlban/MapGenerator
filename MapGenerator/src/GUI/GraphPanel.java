@@ -9,7 +9,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import HitObjects.Pair;
+import hitObject.Pair;
 
 public class GraphPanel extends JPanel{
 

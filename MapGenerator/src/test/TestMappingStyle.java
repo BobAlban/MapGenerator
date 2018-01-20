@@ -1,8 +1,5 @@
 package test;
 
-import pattern.StreamRandom;
-
-
 public class TestMappingStyle {
 
 	public static void main(String[] args) throws Exception {
