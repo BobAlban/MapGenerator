@@ -21,7 +21,6 @@ public class PatternStreamCurve extends PatternStream{
 	public List<Pair<Double, Double>> listPosition() {
 		listPosition = new ArrayList<Pair<Double,Double>>();
 		double angleModification = angleCurve/nbObjects;
-		System.out.println(angleModification*180/Math.PI);
 		listPosition.add(posFirstObject);
 		Pair<Double,Double> posLastObject;
 		Pair<Double,Double> posNextObject;
