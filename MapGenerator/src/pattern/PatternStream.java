@@ -4,10 +4,10 @@ import hitObject.Pair;
 
 public abstract class PatternStream extends Pattern{
 	
-	Pair<Double,Double> posFinalObject;
+	double angleStart;
 	
-	public PatternStream(int nbObjects, Pair<Double, Double> posFirstObject, Pair<Double,Double> posFinalObject) {
+	public PatternStream(int nbObjects, Pair<Double, Double> posFirstObject, double angleStart) {
 		super(nbObjects, posFirstObject);
-		this.posFinalObject=posFinalObject;
+		this.angleStart=angleStart;
 	}
 }

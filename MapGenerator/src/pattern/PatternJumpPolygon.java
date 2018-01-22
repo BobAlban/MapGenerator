@@ -26,7 +26,6 @@ public class PatternJumpPolygon extends PatternJump{
 		for(int i=0;i<nbObjects-1;i++) {
 			posLastObject=l.get(l.size()-1);
 			if(clockwise) {
-				System.out.println(i + ": " + (angle+(i*2*Math.PI/nbPolygonSummit))*180/Math.PI + " ; " + distanceObject*Math.cos(angle+(i*2*Math.PI/nbPolygonSummit)) + " ; " + distanceObject*Math.sin(angle+(i*2*Math.PI/nbPolygonSummit)));
 				posNextObject = new Pair<Double, Double>(posLastObject.getLeft() + distanceObject*Math.cos(angle+(i*2*Math.PI/nbPolygonSummit)), posLastObject.getRight() + distanceObject*Math.sin(angle+(i*2*Math.PI/nbPolygonSummit)));
 			}
 			else {

@@ -1,5 +1,5 @@
 package pattern;
-
+/* cas particuier class file PatterStream
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,4 +22,4 @@ public class PatternBurst extends Pattern {
 		}
 		return listPosition;
 	}
-}
+}/*/
