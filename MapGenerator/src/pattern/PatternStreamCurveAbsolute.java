@@ -21,9 +21,12 @@ public class PatternStreamCurveAbsolute extends Pattern{
 		this.posFinalObject=posFinalObject;
 		this.angleCurve=angleCurve;
 		Pair<Double,Double> posCenter = getCenter();
-		double angleStart=Math.PI-Math.atan((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft()));
+		System.out.println("center: " + posCenter);
+		System.out.println(Math.atan((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft()))*180/Math.PI);
+		double angleStart=-(Math.PI/2)+Math.atan((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft()));
 		double distanceObject=0.5*getDiameter()*angleCurve/nbObjects;
 		Pattern p = new PatternStreamCurve(nbObjects, posFirstObject, angleStart, angleCurve, distanceObject);
+		System.out.println(super.toString() + "\nangleStart: " + angleStart*180/Math.PI + "\nangleCurve: " + angleCurve*180/Math.PI + "\ndistanceObject: " + distanceObject);
 		listPosition=p.listPosition();
 		
 	}
@@ -38,7 +41,7 @@ public class PatternStreamCurveAbsolute extends Pattern{
 		double angleFinalObject=0.5*(Math.PI-angleCurve);
 		double diameter=distanceFirstFinalObject/Math.cos(angleFinalObject);
 		double angleDiameter = angleCurve - angleFinalObject;
-		System.out.println("distanceFirstFinalObject: " + distanceFirstFinalObject + "\ndiameter: " + diameter + "\nangleFinalObject:" + angleFinalObject*180/Math.PI + "\nangleDiameter:" + angleDiameter*180/Math.PI);
+		System.out.println("angleFinalObject: " + angleFinalObject + " ; diameter: " + diameter + " ; angleDiameter: " + angleDiameter);
 		return new Pair<Double,Double>(posFinalObject.getLeft() + 0.5*diameter*Math.cos(angleDiameter),posFinalObject.getRight() + 0.5*diameter*Math.sin(angleDiameter));
 	}
 

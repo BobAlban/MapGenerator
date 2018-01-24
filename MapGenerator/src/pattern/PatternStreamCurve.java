@@ -6,13 +6,11 @@ import hitObject.Pair;
 
 public class PatternStreamCurve extends PatternStream{
 	
-	double angleStart;
 	double angleCurve;
 	double distanceObject;
 	
 	public PatternStreamCurve(int nbObjects, Pair<Double, Double> posFirstObject, double angleStart, double angleCurve, double distanceObject) {
 		super(nbObjects, posFirstObject, angleStart);
-		this.angleStart=angleStart;
 		this.angleCurve=angleCurve;
 		this.distanceObject=distanceObject;
 		listPosition=listPosition();
@@ -33,5 +31,9 @@ public class PatternStreamCurve extends PatternStream{
 			listPosition.add(posNextObject);
 		}
 		return listPosition;
+	}
+	
+	public String toString() {
+		return super.toString() + "\nangleCurve: " + angleCurve*180/Math.PI + "\ndistanceObject: " + distanceObject;
 	}
 }

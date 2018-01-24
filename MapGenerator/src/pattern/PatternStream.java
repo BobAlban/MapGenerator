@@ -10,4 +10,8 @@ public abstract class PatternStream extends Pattern{
 		super(nbObjects, posFirstObject);
 		this.angleStart=angleStart;
 	}
+	
+	public String toString() {
+		return super.toString() +  "\nangleStart: " + angleStart*180/Math.PI;
+	}
 }

@@ -26,4 +26,8 @@ public abstract class Pattern {				//create patterns regardless of the midi file
 	public void showGraph() {
 		new Graph(listPosition,1.5d);
 	}
+	
+	public String toString() {
+		return "\nnbObjects: " + nbObjects + "\nposFirstObject: " + posFirstObject;
+	}
 }
