@@ -21,8 +21,8 @@ public abstract class Pattern {				//create patterns regardless of the midi file
 		return outOfScreen;
 	}
 	
-	public final void showGraph() {
-		new Graph(listPosition,1.2d);
+	public final void showGraph(String nameGraph) {
+		new Graph(listPosition,1.2d,nameGraph);
 	}
 	
 	public final List<Pair<Double, Double>> getListPosition() {
@@ -34,6 +34,6 @@ public abstract class Pattern {				//create patterns regardless of the midi file
 	}
 	
 	public String toString() {
-		return "\nnbObjects: " + nbObjects + "\nposFirstObject: " + posFirstObject;
+		return "___PARAMETERS____________________\nNbObjects: " + nbObjects + "\nPosFirstObject: " + posFirstObject;
 	}
 }
