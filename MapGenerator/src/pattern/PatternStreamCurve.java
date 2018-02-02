@@ -1,23 +1,27 @@
 package pattern;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
 import hitObject.Pair;
 
 public class PatternStreamCurve extends PatternStream{
 	
 	double angleCurve;
 	double distanceObject;
+	double angleStart;
 	
 	public PatternStreamCurve(int nbObjects, Pair<Double, Double> posFirstObject, double angleStart, double angleCurve, double distanceObject) {
-		super(nbObjects, posFirstObject, angleStart);
+		super(nbObjects, posFirstObject);
+		this.angleStart=angleStart;
 		this.angleCurve=angleCurve;
 		this.distanceObject=distanceObject;
 		listPosition=listPosition();
+		System.out.println(toString());
 	}
 
 	public List<Pair<Double, Double>> listPosition() {
-		listPosition = new ArrayList<Pair<Double,Double>>();
+		listPosition = new LinkedList<Pair<Double,Double>>();
 		double angleModification = angleCurve/nbObjects;
 		listPosition.add(posFirstObject);
 		Pair<Double,Double> posLastObject;
@@ -34,6 +38,6 @@ public class PatternStreamCurve extends PatternStream{
 	}
 	
 	public String toString() {
-		return super.toString() + "\nangleCurve: " + angleCurve*180/Math.PI + "\ndistanceObject: " + distanceObject;
+		return super.toString() +  "\nangleStart: " + angleStart*180/Math.PI + "\nangleCurve: " + angleCurve*180/Math.PI + "\ndistanceObject: " + distanceObject;
 	}
 }

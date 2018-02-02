@@ -1,7 +1,5 @@
 package pattern;
 
-import java.util.List;
-
 import hitObject.Pair;
 
 public class PatternStreamCurveAbsolute extends Pattern{
@@ -14,19 +12,20 @@ public class PatternStreamCurveAbsolute extends Pattern{
 	Pair<Double, Double> posFinalObject;
 	double angleCurve;
 	
-	
-	//angle curve is different of superclass's angle curve
 	public PatternStreamCurveAbsolute(int nbObjects, Pair<Double, Double> posFirstObject, Pair<Double, Double> posFinalObject, double angleCurve) {
 		super(nbObjects,posFirstObject);
 		this.posFinalObject=posFinalObject;
 		this.angleCurve=angleCurve;
 		Pair<Double,Double> posCenter = getCenter();
-		System.out.println("center: " + posCenter);
-		System.out.println(Math.atan((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft()))*180/Math.PI);
-		double angleStart=-(Math.PI/2)+Math.atan((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft()));
-		double distanceObject=0.5*getDiameter()*angleCurve/nbObjects;
+		System.out.println("posCenter : " + posCenter + " ;posFirstObject : " + posFirstObject + " ;posFinalObject : " + posFinalObject);
+		/*WARNING*/
+		double angleStart=Math.atan(-1/(posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft()));
+		System.out.println("angleFirstCenter : " + Math.atan(posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft())*180/Math.PI);
+		System.out.println("angleFirstFinal : " + Math.atan(posFinalObject.getRight()-posFirstObject.getRight())/(posFinalObject.getLeft()-posFirstObject.getLeft())*180/Math.PI);
+		System.out.println("angleFinalCenter : " + Math.atan(posCenter.getRight()-posFinalObject.getRight())/(posCenter.getLeft()-posFinalObject.getLeft())*180/Math.PI);
+		System.out.println("angleStart : " + angleStart*180/Math.PI);
+		double distanceObject=getDiameter()*Math.sin(angleCurve/(2*nbObjects));
 		Pattern p = new PatternStreamCurve(nbObjects, posFirstObject, angleStart, angleCurve, distanceObject);
-		System.out.println(super.toString() + "\nangleStart: " + angleStart*180/Math.PI + "\nangleCurve: " + angleCurve*180/Math.PI + "\ndistanceObject: " + distanceObject);
 		listPosition=p.listPosition();
 		
 	}
@@ -37,15 +36,10 @@ public class PatternStreamCurveAbsolute extends Pattern{
 	}
 	
 	private Pair<Double,Double> getCenter(){
+		Pair<Double,Double> posMiddle = new Pair<Double,Double>((posFirstObject.getLeft()+posFinalObject.getLeft())/2,(posFirstObject.getRight()+posFinalObject.getRight())/2);
+		double radius=0.5*getDiameter();
 		double distanceFirstFinalObject=Math.sqrt(Math.pow(posFinalObject.getLeft()-posFirstObject.getLeft(), 2) + Math.pow(posFinalObject.getRight()-posFirstObject.getRight(), 2));
-		double angleFinalObject=0.5*(Math.PI-angleCurve);
-		double diameter=distanceFirstFinalObject/Math.cos(angleFinalObject);
-		double angleDiameter = angleCurve - angleFinalObject;
-		System.out.println("angleFinalObject: " + angleFinalObject + " ; diameter: " + diameter + " ; angleDiameter: " + angleDiameter);
-		return new Pair<Double,Double>(posFinalObject.getLeft() + 0.5*diameter*Math.cos(angleDiameter),posFinalObject.getRight() + 0.5*diameter*Math.sin(angleDiameter));
+		double curve=Math.sqrt(Math.pow(radius/(distanceFirstFinalObject), 2)-0.25);
+		return new Pair<Double,Double>(posMiddle.getLeft()+curve*(posFinalObject.getRight()-posFirstObject.getRight()),posMiddle.getRight()-curve*(posFinalObject.getLeft()-posFirstObject.getLeft()));
 	}
-
-	public List<Pair<Double, Double>> listPosition() {
-		return listPosition;
-	}	
 }

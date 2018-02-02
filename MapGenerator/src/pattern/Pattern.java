@@ -6,7 +6,7 @@ import hitObject.Pair;
 
 public abstract class Pattern {				//create patterns regardless of the midi file
 	
-	List<Pair<Double, Double>> listPosition;
+	protected List<Pair<Double, Double>> listPosition;
 	boolean outOfScreen;
 	int nbObjects;
 	Pair<Double,Double> posFirstObject;
@@ -17,14 +17,20 @@ public abstract class Pattern {				//create patterns regardless of the midi file
 		outOfScreen=false;
 	}
 	
-	public abstract List<Pair<Double,Double>> listPosition();
-	
-	public boolean isOutOfScreen() {
+	public final boolean isOutOfScreen() {
 		return outOfScreen;
 	}
 	
-	public void showGraph() {
-		new Graph(listPosition,1.5d);
+	public final void showGraph() {
+		new Graph(listPosition,1.2d);
+	}
+	
+	public final List<Pair<Double, Double>> getListPosition() {
+		return listPosition;
+	}
+	
+	protected List<Pair<Double, Double>> listPosition() {
+		return listPosition;
 	}
 	
 	public String toString() {
