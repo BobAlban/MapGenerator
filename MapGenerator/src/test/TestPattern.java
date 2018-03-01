@@ -8,6 +8,7 @@ public class TestPattern {
 	public static void main(String[] args) throws Exception {
 		Pair<Double,Double> pos = new Pair<Double,Double>(100d,100d);
 		Pair<Double,Double> pos2 = new Pair<Double,Double>(300d,300d);
+		Pair<Double,Double> pos3 = new Pair<Double,Double>(200d,200d);
 		Pattern pattern;
 		
 		//______Square___________________________________________________________________________________//
@@ -16,8 +17,8 @@ public class TestPattern {
 		
 		//______StreamCurve______________________________________________________________________________//
 		
-		int nbObjects=12;
-		double angleCurve=(0.5+Math.random())*Math.PI/2;
+		int nbObjects=13;
+		double angleCurve=Math.PI/(1.6);
 		System.out.println("\n___ORIGINAL______________________");
 		pattern = new PatternStreamCurve(nbObjects , pos, angleCurve, -Math.random()*Math.PI/2, 30);
 		pattern.showGraph("Original");
@@ -26,11 +27,15 @@ public class TestPattern {
 		pattern = new PatternStreamCurveAbsolute(nbObjects, pos, angleCurve, pos2);
 		pattern.showGraph("Immitation");
 		System.out.println(pattern.getListPosition().get(nbObjects-1));
-		//______StreamDoubleAbsolute______________________________________________________________________//
 		
+		//______StreamDoubleAbsolute______________________________________________________________________//
 		/*
-		pattern = new PatternStreamDoubleAbsolute(20, pos, 2*Math.PI/6, pos2, true);
-		pattern.showGraph("Graph");
+		int nbObjects = 20;
+		double angleCurve = Math.PI/3;
+		pattern = new PatternStreamDoubleAbsolute(nbObjects, pos, angleCurve, pos2, true);
+		pattern.showGraph("Graph1");
+		pattern = new PatternStreamDoubleAbsolute(nbObjects, pos, angleCurve, pos2, false);
+		pattern.showGraph("Graph2");
 		*/
 		//_______________________________________________________________________________________________//
 		

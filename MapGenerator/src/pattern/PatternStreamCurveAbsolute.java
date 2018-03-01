@@ -11,14 +11,8 @@ public class PatternStreamCurveAbsolute extends PatternStream{
 		this.posFinalObject=posFinalObject;
 		Pair<Double,Double> posCenter = getCenter();
 		System.out.println("PosCenter: " + posCenter);
-		System.out.println("Coef: " + -1/((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft())));
+		System.out.println("Diameter: " + getDiameter());
 		double angleStart=Math.atan(-1/((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft())));
-		//double distanceObject=getDiameter()*Math.sin(angleCurve/(2*nbObjects));
-		System.out.println("_______________________________________________________________________");
-		System.out.println("n: " + (2*Math.PI*nbObjects)/angleCurve);
-		System.out.println("rayon: " + getDiameter()/2);
-		System.out.println("1: " + ((Math.PI*nbObjects)/angleCurve) + " ; 2: " + Math.pow((getDiameter()/2), 2) + " ; 3: " + Math.sin(angleCurve/nbObjects));
-		System.out.println("_______________________________________________________________________");
 		double distanceObject=getDiameter()*Math.sin(angleCurve/(2*nbObjects));
 		Pattern p = new PatternStreamCurve(nbObjects, posFirstObject, angleCurve, angleStart, distanceObject);
 		System.out.println(toString());
@@ -36,7 +30,11 @@ public class PatternStreamCurveAbsolute extends PatternStream{
 	
 	private double getDiameter() {
 		double distanceFirstFinalObject=Math.sqrt(Math.pow(posFinalObject.getLeft()-posFirstObject.getLeft(), 2) + Math.pow(posFinalObject.getRight()-posFirstObject.getRight(), 2));
-		return distanceFirstFinalObject/Math.cos(0.5*(Math.PI-angleCurve));
+		if(angleCurve<Math.PI)	return distanceFirstFinalObject/(2*Math.sin(angleCurve/2));
+		else {
+			System.out.println("JE RENTRE DANS LE ELSE: " + ((2*Math.PI-angleCurve)/2)*180/Math.PI);
+			return distanceFirstFinalObject/(2*Math.sin((2*Math.PI-angleCurve)/2));
+		}
 	}
 	
 	private Pair<Double,Double> getCenter(){
