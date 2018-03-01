@@ -13,6 +13,12 @@ public class PatternStreamCurveAbsolute extends PatternStream{
 		System.out.println("PosCenter: " + posCenter);
 		System.out.println("Coef: " + -1/((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft())));
 		double angleStart=Math.atan(-1/((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft())));
+		//double distanceObject=getDiameter()*Math.sin(angleCurve/(2*nbObjects));
+		System.out.println("_______________________________________________________________________");
+		System.out.println("n: " + (2*Math.PI*nbObjects)/angleCurve);
+		System.out.println("rayon: " + getDiameter()/2);
+		System.out.println("1: " + ((Math.PI*nbObjects)/angleCurve) + " ; 2: " + Math.pow((getDiameter()/2), 2) + " ; 3: " + Math.sin(angleCurve/nbObjects));
+		System.out.println("_______________________________________________________________________");
 		double distanceObject=getDiameter()*Math.sin(angleCurve/(2*nbObjects));
 		Pattern p = new PatternStreamCurve(nbObjects, posFirstObject, angleCurve, angleStart, distanceObject);
 		System.out.println(toString());

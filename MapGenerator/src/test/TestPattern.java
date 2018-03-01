@@ -26,7 +26,6 @@ public class TestPattern {
 		pattern = new PatternStreamCurveAbsolute(nbObjects, pos, angleCurve, pos2);
 		pattern.showGraph("Immitation");
 		System.out.println(pattern.getListPosition().get(nbObjects-1));
-		
 		//______StreamDoubleAbsolute______________________________________________________________________//
 		
 		/*
