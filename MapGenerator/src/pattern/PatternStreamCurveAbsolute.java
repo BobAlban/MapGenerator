@@ -29,12 +29,10 @@ public class PatternStreamCurveAbsolute extends PatternStream{
 	}
 	
 	private double getDiameter() {
-		double distanceFirstFinalObject=Math.sqrt(Math.pow(posFinalObject.getLeft()-posFirstObject.getLeft(), 2) + Math.pow(posFinalObject.getRight()-posFirstObject.getRight(), 2));
-		if(angleCurve<Math.PI)	return distanceFirstFinalObject/(2*Math.sin(angleCurve/2));
-		else {
-			System.out.println("JE RENTRE DANS LE ELSE: " + ((2*Math.PI-angleCurve)/2)*180/Math.PI);
-			return distanceFirstFinalObject/(2*Math.sin((2*Math.PI-angleCurve)/2));
-		}
+		double chord = Math.sqrt(Math.pow(posFinalObject.getLeft()-posFirstObject.getLeft(), 2) + Math.pow(posFinalObject.getRight()-posFirstObject.getRight(), 2));
+		double apothem = (0.5*chord)/Math.tan(0.5*angleCurve);
+		double radius = Math.sqrt(Math.pow(0.5*chord, 2) + Math.pow(apothem, 2));		
+		return 2*radius;
 	}
 	
 	private Pair<Double,Double> getCenter(){
