@@ -17,8 +17,8 @@ public class TestPattern {
 		
 		//______StreamCurve______________________________________________________________________________//
 		
-		int nbObjects=13;
-		double angleCurve=Math.PI/(2);
+		int nbObjects=12;
+		double angleCurve=Math.PI/(1);
 		System.out.println("\n___ORIGINAL______________________");
 		pattern = new PatternStreamCurve(nbObjects , pos, angleCurve, 0, 30);
 		pattern.showGraph("Original");

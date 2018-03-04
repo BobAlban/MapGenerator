@@ -9,11 +9,12 @@ public class PatternStreamCurveAbsolute extends PatternStream{
 	public PatternStreamCurveAbsolute(int nbObjects, Pair<Double, Double> posFirstObject, double angleCurve, Pair<Double, Double> posFinalObject) {
 		super(nbObjects,posFirstObject,angleCurve);
 		this.posFinalObject=posFinalObject;
+		double diameter = getDiameter();
 		Pair<Double,Double> posCenter = getCenter();
 		System.out.println("PosCenter: " + posCenter);
-		System.out.println("Diameter: " + getDiameter());
+		System.out.println("Diameter: " + diameter);
 		double angleStart=Math.atan(-1/((posCenter.getRight()-posFirstObject.getRight())/(posCenter.getLeft()-posFirstObject.getLeft())));
-		double distanceObject=getDiameter()*Math.sin(angleCurve/(2*nbObjects));
+		double distanceObject=diameter*Math.sin(angleCurve/(2*nbObjects));
 		Pattern p = new PatternStreamCurve(nbObjects, posFirstObject, angleCurve, angleStart, distanceObject);
 		System.out.println(toString());
 		listPosition=p.listPosition();
