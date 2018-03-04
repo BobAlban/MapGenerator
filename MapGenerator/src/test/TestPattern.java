@@ -18,9 +18,9 @@ public class TestPattern {
 		//______StreamCurve______________________________________________________________________________//
 		
 		int nbObjects=12;
-		double angleCurve=Math.PI/(1);
+		double angleCurve=Math.random()*Math.PI;
 		System.out.println("\n___ORIGINAL______________________");
-		pattern = new PatternStreamCurve(nbObjects , pos, angleCurve, 0, 30);
+		pattern = new PatternStreamCurve(nbObjects , pos, angleCurve, 0*Math.random()*Math.PI, 30);
 		pattern.showGraph("Original");
 		pos2 = pattern.getListPosition().get(nbObjects-1);
 		System.out.println(pos2 + "\n___IMMITATION____________________");
@@ -30,12 +30,12 @@ public class TestPattern {
 		
 		//______StreamDoubleAbsolute______________________________________________________________________//
 		/*
-		int nbObjects = 20;
-		double angleCurve = Math.PI/3;
+		int nbObjects = 10;
+		double angleCurve = Math.PI/2.2;
 		pattern = new PatternStreamDoubleAbsolute(nbObjects, pos, angleCurve, pos2, true);
-		pattern.showGraph("Graph1");
+		pattern.showGraph("Clockwise");
 		pattern = new PatternStreamDoubleAbsolute(nbObjects, pos, angleCurve, pos2, false);
-		pattern.showGraph("Graph2");
+		pattern.showGraph("Conter Clockwise");
 		*/
 		//_______________________________________________________________________________________________//
 		

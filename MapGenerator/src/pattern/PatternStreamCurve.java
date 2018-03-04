@@ -14,7 +14,7 @@ public class PatternStreamCurve extends PatternStream{
 		super(nbObjects, posFirstObject, angleCurve);
 		this.angleStart=angleStart;
 		this.distanceObject=distanceObject;
-		System.out.println(toString());
+		//System.out.println(toString());
 		listPosition=listPosition();
 	}
 
