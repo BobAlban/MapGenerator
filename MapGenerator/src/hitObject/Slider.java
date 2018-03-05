@@ -73,11 +73,11 @@ public class Slider implements HitObject {
 	 * 192,192,0,6,0,L|336:192,1,140
 	 * 192,96,827,2,0,L|336:96,163,140				//162 reverse arrows
 	 * 32,256,2068,2,0,C|112:304|160:272,1,140		//angle avec arrondi
-	 * 288,256,2068,2,0,L|368:304|416:272,1,140		//angle sans arrondi
+	 * 288,256,2068,2,0,L|368:304|416:272,1,140		//angle sans arrondi 
 	 * 288,64,2068,2,0,P|368:112|416:80,1,140		//courbure parfaite
 	 * 32,64,3931,2,0,B|464:64|464:64|464:304|464:304|288:304|320:192|128:240|272:304|256:336,1,980 //exemple de B :2x le même point -> L  1x le même point -> P
 	 * 
-	 * 
+	 * L useless, use B and place 2 point for red anchor
 	 * 
 	 * WARNING:
 	 * 96,128,1655,6,0,L|256:128,1,140
