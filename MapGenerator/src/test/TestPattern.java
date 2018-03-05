@@ -16,7 +16,7 @@ public class TestPattern {
 		//pattern = new PatternJumpPolygon(4, pos, Math.PI/4, 100d, false, 4);
 		
 		//______StreamCurve______________________________________________________________________________//
-		
+		/*
 		int nbObjects=12;
 		double angleCurve=Math.random()*Math.PI;
 		System.out.println("\n___ORIGINAL______________________");
@@ -27,7 +27,7 @@ public class TestPattern {
 		pattern = new PatternStreamCurveAbsolute(nbObjects, pos, angleCurve, pos2);
 		pattern.showGraph("Immitation");
 		System.out.println(pattern.getListPosition().get(nbObjects-1));
-		
+		*/
 		//______StreamDoubleAbsolute______________________________________________________________________//
 		/*
 		int nbObjects = 10;
@@ -37,8 +37,13 @@ public class TestPattern {
 		pattern = new PatternStreamDoubleAbsolute(nbObjects, pos, angleCurve, pos2, false);
 		pattern.showGraph("Conter Clockwise");
 		*/
-		//_______________________________________________________________________________________________//
+		//______SliderStraight_________________________________________________________________________//
 		
+		pattern = new PatternSliderStraight(pos, 5*Math.PI/180, 100);
+		System.out.println(pattern.toString());
+		System.out.println(pattern.getListPosition());
+		
+		//_____________________________________________________________________________________________//
 	}
 
 }
