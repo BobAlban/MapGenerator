@@ -73,15 +73,17 @@ public class GraphPanel extends JPanel{
 		paintCircle(g, circle, i+res);
 		Pair<Double,Double> oldPos = l.get(i+res);
 		Pair<Double,Double> nextPos = l.get(i+res+1);
-		g.setColor(Color.RED);
 		Graphics2D g2 = (Graphics2D) g;
 		while(nextPos!=PatternSlider.nullElem) {
+			System.out.println("oldPos: " + oldPos);
+			System.out.println("nextPos: " + nextPos);
 			g2.setStroke(new BasicStroke(3));
-			g.drawLine((int)(sizeMultiplier*(oldPos.getRight().intValue())), (int)(sizeMultiplier*(oldPos.getLeft().intValue())), (int)(sizeMultiplier*(nextPos.getLeft().intValue())), (int)(sizeMultiplier*(nextPos.getRight().intValue())));
+			g.setColor(Color.RED);
+			g.drawLine((int)(sizeMultiplier*(oldPos.getLeft().intValue())), (int)(sizeMultiplier*(oldPos.getRight().intValue())), (int)(sizeMultiplier*(nextPos.getLeft().intValue())), (int)(sizeMultiplier*(nextPos.getRight().intValue())));
+			drawCross(g2, nextPos);
 			res++;
 			oldPos = l.get(i+res);
 			nextPos = l.get(i+res+1);
-			drawCross(g2, nextPos);
 		}
 		g2.setStroke(new BasicStroke(1));
 		g.setColor(Color.BLACK);
@@ -91,6 +93,7 @@ public class GraphPanel extends JPanel{
 	
 	private void drawCross(Graphics g, Pair<Double,Double> pos) {
 		Graphics2D g2 = (Graphics2D) g;
+		g.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(3));
 		g.drawLine((int)(sizeMultiplier*pos.getLeft().intValue()-4), (int)(sizeMultiplier*pos.getRight().intValue()-4), (int)(sizeMultiplier*pos.getLeft().intValue()+4), (int)(sizeMultiplier*pos.getRight().intValue()+4));
 		g.drawLine((int)(sizeMultiplier*pos.getLeft().intValue()-4), (int)(sizeMultiplier*pos.getRight().intValue()+4), (int)(sizeMultiplier*pos.getLeft().intValue()+4), (int)(sizeMultiplier*pos.getRight().intValue()-4));

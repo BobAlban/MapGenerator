@@ -10,11 +10,11 @@ public class TestPattern {
 		Pair<Double,Double> pos2 = new Pair<Double,Double>(300d,300d);
 		Pair<Double,Double> pos3 = new Pair<Double,Double>(200d,200d);
 		Pattern pattern;
-		
+
 		//______Square___________________________________________________________________________________//
-		
+
 		//pattern = new PatternJumpPolygon(4, pos, Math.PI/4, 100d, false, 4);
-		
+
 		//______StreamCurve______________________________________________________________________________//
 		/*
 		int nbObjects=12;
@@ -27,7 +27,7 @@ public class TestPattern {
 		pattern = new PatternStreamCurveAbsolute(nbObjects, pos, angleCurve, pos2);
 		pattern.showGraph("Immitation");
 		System.out.println(pattern.getListPosition().get(nbObjects-1));
-		*/
+		 */
 		//______StreamDoubleAbsolute______________________________________________________________________//
 		/*
 		int nbObjects = 10;
@@ -36,15 +36,20 @@ public class TestPattern {
 		pattern.showGraph("Clockwise");
 		pattern = new PatternStreamDoubleAbsolute(nbObjects, pos, angleCurve, pos2, false);
 		pattern.showGraph("Conter Clockwise");
-		*/
+		 */
 		//______SliderStraight_________________________________________________________________________//
-		
+		/*
 		pattern = new PatternSliderStraight(pos, 5*Math.PI/180, 100);
 		System.out.println(pattern.toString());
 		System.out.println(pattern.getListPosition());
-		pattern.showGraph("Slider");
-		
-		//_____________________________________________________________________________________________//
+		pattern.showGraph("Straight");
+		*/
+		//______SliderCurve_________________________________________________________________________//
+
+		pattern = new PatternSliderCurve(pos, -5*Math.PI/180, 100, -20);
+		System.out.println(pattern.toString());
+		System.out.println(pattern.getListPosition());
+		pattern.showGraph("Curve");
 	}
 
 }
