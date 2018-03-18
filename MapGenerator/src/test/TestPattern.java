@@ -42,6 +42,7 @@ public class TestPattern {
 		pattern = new PatternSliderStraight(pos, 5*Math.PI/180, 100);
 		System.out.println(pattern.toString());
 		System.out.println(pattern.getListPosition());
+		pattern.showGraph("Slider");
 		
 		//_____________________________________________________________________________________________//
 	}

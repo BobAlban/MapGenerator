@@ -22,7 +22,7 @@ public abstract class Pattern {				//create patterns regardless of the midi file
 	}
 	
 	public final void showGraph(String nameGraph) {
-		new Graph(listPosition,1.2d,nameGraph);
+		new Graph(listPosition,1.7d,nameGraph);
 	}
 	
 	public final List<Pair<Double, Double>> getListPosition() {
