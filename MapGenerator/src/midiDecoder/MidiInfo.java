@@ -2,17 +2,13 @@ package midiDecoder;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
-
 import hitObject.Pair;
 
 public class MidiInfo {
@@ -33,7 +29,7 @@ public class MidiInfo {
 		resolution=resolution();
 		durationTick=durationTick();
 		getMidiEvents();
-		BPM=getBPM();
+		calculateTempos();
 		System.out.println(listTempo);
 		//System.out.println(midiStruct);
 		//System.out.println(midiStruct.toStringMilliseconds(durationTick));
@@ -49,6 +45,10 @@ public class MidiInfo {
 
 	public int getResolution() {
 		return resolution;
+	}
+	
+	public float getBPM() {
+		return BPM;
 	}
 
 	private float durationTick() throws Exception {
@@ -67,13 +67,14 @@ public class MidiInfo {
 	 * SECOND : overwrite on listTempo the right beat division to each note 
 	 * @return the BPM calculated, always beetween 125 and 250
 	 */
-	private float getBPM() {
+	private void calculateTempos() {
 		float mostFrequentTime = listTempo.get(0).getLeft();
 		float BPM=60000/mostFrequentTime;
 		while(!(BPM>=125f && BPM<=250f)) {
 			if(BPM<125f)	BPM*=2;
 			if(BPM>250f)	BPM/=2;
 		}
+		this.BPM=BPM;
 		//The bigger beatPrecision is, the most accurate beats divison will be
 		//(e.g. a beatPrecision of 2 won't make the difference beetween a beat divison of 0.667 and 0.8, but a beatPrecision of 4 will)
 		int beatPrecision = 4;
@@ -88,7 +89,6 @@ public class MidiInfo {
 				p.setLeft((float)(Math.round(p.getLeft()/beatPrecision)));
 			}
 		}
-		return BPM;
 	}
 
 	private void getMidiEvents() throws Exception {

@@ -4,4 +4,6 @@ public interface MapConstructor {
 	
 	public void osuFileGeneration();
 	
+	public String hitObjects();
+	
 }
